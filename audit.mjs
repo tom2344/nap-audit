@@ -47,7 +47,8 @@ function audit(input) {
 try {
   const [filename, ...extra] = process.argv.slice(2);
   if (!filename || extra.length) throw new Error('Usage: node audit.mjs <listings.json>');
-  const report = audit(JSON.parse(readFileSync(filename, 'utf8')));
+  const json = readFileSync(filename, 'utf8').replace(/^\uFEFF/u, '');
+  const report = audit(JSON.parse(json));
   console.log(JSON.stringify(report, null, 2));
   process.exitCode = report.findings.length ? 1 : 0;
 } catch (error) {
